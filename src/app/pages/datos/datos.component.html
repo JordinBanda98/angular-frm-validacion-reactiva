@@ -1,0 +1,122 @@
+<h1>Formulario de Actividades</h1>
+<div class="m-2">
+    <form [formGroup]="forma" (ngSubmit)="guardar()">
+        <div formGroupName="nombreCompleto">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" formControlName="nombre"
+                [ngClass]="{'is-invalid' : forma.get('nombreCompleto.nombre').invalid && forma.get('nombreCompleto.nombre').touched}">
+                <div *ngIf="forma.get('nombreCompleto.nombre').errors?.required" class="invalid-feedback">
+                    nombre necesario
+                </div>
+                <div *ngIf="forma.get('nombreCompleto.nombre').errors?.minlength" class="invalid-feedback">
+                    Por lo menos debe tener 4 caracteres
+                </div>
+                <div *ngIf="forma.get('nombreCompleto.nombre').errors?.noJordin" class="invalid-feedback">
+                    No te puedes llamar Jordin
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="nombre">Apellidos</label>
+                <input type="text" class="form-control" formControlName="apellido"
+                [ngClass]="{'is-invalid' : forma.get('nombreCompleto.apellido').invalid && forma.get('nombreCompleto.apellido').touched}">
+                <div *ngIf="forma.get('nombreCompleto.apellido').errors?.required" class="invalid-feedback">
+                    Apellidos necesario
+                </div>
+                <div *ngIf="forma.get('nombreCompleto.apellido').errors?.minlength" class="invalid-feedback">
+                    Por lo menos debe tener 3 caracteres
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="usuario">Usuario</label>
+            <input type="text" class="form-control" formControlName="usuario"  
+            [ngClass]="{'is-invalid' : forma.get('usuario').invalid && forma.get('usuario').touched}"/>
+            <div *ngIf="forma.get('usuario').errors?.required" class="invalid-feedback">
+                usuario necesario
+            </div>
+            <div *ngIf="forma.get('usuario').errors?.existe" class="invalid-feedback">
+                El nombre usuario ya existe
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" formControlName="pass" [ngClass]="{'is-invalid' : forma.get('pass').invalid && forma.get('pass').touched}" />
+            <div *ngIf="forma.get('pass').errors?.required" class="invalid-feedback">
+                Contraseña necesario
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Confirme su password</label>
+            <input type="password" class="form-control" formControlName="pass2" [ngClass]="{'is-invalid' : forma.get('pass2').invalid && forma.get('pass2').touched}" />
+            <div *ngIf="forma.get('pass2').errors?.required" class="invalid-feedback">
+                Confirma contraseña necesario
+            </div>
+            <div *ngIf="forma.get('pass2').errors?.noIgual" class="invalid-feedback">
+                La contraseña no coincide con la primera ingresada.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlSelect2">Cliente</label>
+            <select class="form-control" formControlName="cliente" [ngClass]="{'is-invalid' : forma.get('cliente').invalid && forma.get('cliente').touched}">
+                <option *ngFor="let cliente of clientes">
+                    {{cliente}}
+                </option>
+            </select>
+            <div *ngIf="forma.get('cliente').errors?.required" class="invalid-feedback">
+                cliente es necesario
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="correo">Correo</label>
+            <input type="email" class="form-control" formControlName="correo" 
+            [ngClass]="{'is-invalid' : forma.get('correo').invalid && forma.get('correo').touched}">
+            <div *ngIf="forma.get('correo').errors?.required" class="invalid-feedback">
+                correo necesario
+            </div>
+            <div *ngIf="forma.get('correo').errors?.pattern" class="invalid-feedback">
+                El correo no tiene el formato requerido
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Seleccione rango</label>
+            <select class="form-control" formControlName="rango"
+                [ngClass]="{'is-invalid' : forma.get('rango').invalid && forma.get('rango').touched}">
+                <option *ngFor="let item of rangos">
+                    {{item}}
+                </option>
+            </select>
+            <div *ngIf="forma.get('rango').errors?.required" class="invalid-feedback">
+                Rango necesario
+            </div>
+            <div *ngIf="forma.get('rango').errors?.noUsuario" class="invalid-feedback">
+                Debe tener el rango de administrador
+            </div>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" formControlName="vacaciones" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Esta de vacaciones?</label>
+        </div>
+        <div formArrayName="intereses">
+            <div class="form-group">
+                <button type="button" class="btn btn-info" (click)="agregarIntereses()">Agregar</button>
+                <br><label>intereses</label>
+                <input *ngFor="let interes of forma.get('intereses')['controls']; let i = index" type="text" class="form-control"
+                [formControlName]="i" />
+            </div>
+        </div>
+        <button class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<div class="p-2">
+    status del usuario: {{ forma.controls.usuario.status }}
+</div>
+<div class="p-2">
+    {{ forma.value | json }}
+</div>
+<div class="p-2">
+    status del formulario: {{ forma.status }}
+</div>
+<div class="p-2">
+    status de nombre completo: {{ forma.controls.nombreCompleto.status }}
+</div>
