@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup,FormControl, Validators, FormArray } from '@angular/forms'
 import { Observable } from 'rxjs';
 
-
 @Component({
   selector: 'app-datos',
   templateUrl: './datos.component.html',
@@ -23,6 +22,7 @@ export class DatosComponent implements OnInit {
       pass2 : new FormControl('',[Validators.required]),
       cliente : new FormControl('',Validators.required),
       rango : new  FormControl('',[Validators.required,this.noUsuario]),
+      foto: new FormControl('', [Validators.required], this.permitido),
       vacaciones : new FormControl(false,Validators.required),
       correo: new FormControl('', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]),
       intereses: new FormArray([
@@ -78,6 +78,27 @@ export class DatosComponent implements OnInit {
       }
     );
     return promesa;
-  } 
+  }
+  
 
+  permitido(control : FormControl) : Promise<any> | Observable<any>{
+    const promesa_file = new Promise(
+      (resolve,reject) => {
+        setTimeout(() => {
+          const file = control.value;
+          if (file) {
+            console.log(file)
+            var extension = file.substring(file.lastIndexOf('.') + 1).toLowerCase();
+            console.log(extension)
+            if (extension != 'png' || extension != 'jpg') {
+              resolve({ permitido: true })
+            } else {
+              resolve(null);
+            }
+          }
+        },3000)
+      }
+    );
+    return promesa_file;
+  }
 }
